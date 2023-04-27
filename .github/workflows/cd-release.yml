@@ -1,16 +1,13 @@
-name: cd
+name: cd-release
 
 on:
   push:
-    branches:
-      - dev
-  pull_request:
     branches:
       - main
 
 jobs:
   build:
-    name: build dev
+    name: build prod
     permissions:
       id-token: write
       contents: read
@@ -28,13 +25,13 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: ${{ secrets.ASSUME_ROLE_DEV }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE_PROD }}
           role-session-name: github-visitor-lambda-session
 
       # Terraform remote backend state
       - name: Terraform S3 Backend
         id: create
-        run: aws s3api create-bucket --bucket ${{ vars.S3_TF_DEV }} --region ${{ vars.REGION }} --create-bucket-configuration LocationConstraint=${{ vars.REGION }}
+        run: aws s3api create-bucket --bucket ${{ secrets.KEY_S3_TF_PROD }} --region ${{ vars.REGION }} --create-bucket-configuration LocationConstraint=${{ vars.REGION }}
         continue-on-error: true
 
       # Terraform
@@ -47,8 +44,8 @@ jobs:
         id: init
         run: |
           terraform init \
-            -backend-config='bucket=${{ vars.S3_TF_DEV }}' \
-            -backend-config='key=${{ vars.KEY_S3_TF_DEV }}' \
+            -backend-config='bucket=${{ secrets.S3_TF_PROD }}' \
+            -backend-config='key=${{ secrets.KEY_S3_TF_PROD }}' \
             -backend-config='region=${{ vars.REGION }}'
 
       - name: Terraform Validate
@@ -60,12 +57,12 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           terraform plan \
-            -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
+            -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_PROD }}' \
             -var='region=${{ vars.REGION }}' \
-            -var='stage=${{ vars.API_GATEWAY_STAGE_DEV }}' \
-            -var='origin=${{ vars.ORIGIN_DEV }}' \
+            -var='stage=${{ vars.API_GATEWAY_STAGE_PROD }}' \
+            -var='origin=${{ vars.ORIGIN_PROD }}' \
             -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
-            -var='db_name=${{ vars.DB_NAME_DEV }}' \
+            -var='db_name=${{ vars.DB_NAME_PROD }}' \
             -refresh=false  -no-color -out=plan.out
         continue-on-error: false
 
@@ -96,17 +93,4 @@ jobs:
           name: cypress-screenshots
           path: cypress/screenshots
 
-      # terraform destroy
-      - name: Terraform Destroy
-        id: destroy
-        if: ${{ steps.cypress.outcome == 'success' }}
-        run: |
-          terraform destroy \
-            -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
-            -var='region=${{ vars.REGION }}' \
-            -var='stage=${{ vars.API_GATEWAY_STAGE_DEV }}' \
-            -var='origin=${{ vars.ORIGIN_DEV }}' \
-            -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
-            -var='db_name=${{ vars.DB_NAME_DEV }}' \
-            -refresh=false  -no-color -auto-approve
 
