@@ -204,7 +204,7 @@ output "visitor2_stage" {
   value = "${aws_api_gateway_stage.stage.invoke_url}/${var.api_resource_name}"
 }
 
-resource "aws_apigatewayv2_api_mapping" "example" {
+resource "aws_api_gateway_base_path_mapping" "api_mapping" {
   api_id      = aws_api_gateway_rest_api.api_gateway.id
   domain_name = var.api_sub_domain_name
   stage       = var.stage
