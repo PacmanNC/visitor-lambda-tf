@@ -67,8 +67,8 @@ jobs:
             -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
             -var='db_name=${{ vars.DB_NAME_DEV }}' \
             -var='enable_api_gateway_domain_name=1' \
-            -var='website_domain_name={{ vars.WEBSITE_DOMAIN_NAME }}' \
-            -var='api_sub_domain_name={{ vars.API_SUB_DOMAIN_NAME }}' \
+            -var='website_domain_name=${{ vars.WEBSITE_DOMAIN_NAME }}' \
+            -var='api_sub_domain_name=${{ vars.API_SUB_DOMAIN_NAME }}' \
             -refresh=false  -no-color -out=plan.out
         continue-on-error: false
 
@@ -112,7 +112,7 @@ jobs:
             -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
             -var='db_name=${{ vars.DB_NAME_DEV }}' \
             -var='enable_api_gateway_domain_name=1' \
-            -var='website_domain_name={{ vars.WEBSITE_DOMAIN_NAME }}' \
-            -var='api_sub_domain_name={{ vars.API_SUB_DOMAIN_NAME }}' \
+            -var='website_domain_name=${{ vars.WEBSITE_DOMAIN_NAME }}' \
+            -var='api_sub_domain_name=${{ vars.API_SUB_DOMAIN_NAME }}' \
             -refresh=false  -no-color -auto-approve
 
