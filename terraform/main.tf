@@ -7,6 +7,14 @@ terraform {
   }
 }
 
+# AWS provider for resources
 provider "aws" {
-  region  = var.region
+  alias  = var.region
+  region = var.region
+}
+
+# AWS provider zone for SSL certificates
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
 }
