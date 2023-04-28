@@ -100,19 +100,19 @@ jobs:
           path: cypress/screenshots
 
       # terraform destroy
-      - name: Terraform Destroy
-        id: destroy
-        if: ${{ steps.cypress.outcome == 'success' }}
-        run: |
-          terraform destroy \
-            -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
-            -var='region=${{ vars.REGION }}' \
-            -var='stage=${{ vars.API_GATEWAY_STAGE_DEV }}' \
-            -var='origin=${{ vars.ORIGIN_DEV }}' \
-            -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
-            -var='db_name=${{ vars.DB_NAME_DEV }}' \
-            -var='enable_api_gateway_domain_name=1' \
-            -var='website_domain_name=${{ vars.WEBSITE_DOMAIN_NAME }}' \
-            -var='api_sub_domain_name=${{ vars.API_SUB_DOMAIN_NAME }}' \
-            -refresh=false  -no-color -auto-approve
+      # - name: Terraform Destroy
+      #   id: destroy
+      #   if: ${{ steps.cypress.outcome == 'success' }}
+      #   run: |
+      #     terraform destroy \
+      #       -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
+      #       -var='region=${{ vars.REGION }}' \
+      #       -var='stage=${{ vars.API_GATEWAY_STAGE_DEV }}' \
+      #       -var='origin=${{ vars.ORIGIN_DEV }}' \
+      #       -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
+      #       -var='db_name=${{ vars.DB_NAME_DEV }}' \
+      #       -var='enable_api_gateway_domain_name=1' \
+      #       -var='website_domain_name=${{ vars.WEBSITE_DOMAIN_NAME }}' \
+      #       -var='api_sub_domain_name=${{ vars.API_SUB_DOMAIN_NAME }}' \
+      #       -refresh=false  -no-color -auto-approve
 
