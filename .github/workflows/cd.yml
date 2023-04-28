@@ -102,7 +102,7 @@ jobs:
       # terraform destroy
       - name: Terraform Destroy
         id: destroy
-        if: ${{ steps.cypress.outcome == 'success' }}
+        # if: ${{ steps.cypress.outcome == 'success' }}
         run: |
           terraform destroy \
             -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
