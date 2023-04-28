@@ -66,6 +66,9 @@ jobs:
             -var='origin=${{ vars.ORIGIN_DEV }}' \
             -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
             -var='db_name=${{ vars.DB_NAME_DEV }}' \
+            -var='enable_api_gateway_domain_name=0' \
+            -var='website_domain_name=""' \
+            -var='api_sub_domain_name=""' \
             -refresh=false  -no-color -out=plan.out
         continue-on-error: false
 
@@ -108,5 +111,8 @@ jobs:
             -var='origin=${{ vars.ORIGIN_DEV }}' \
             -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
             -var='db_name=${{ vars.DB_NAME_DEV }}' \
+            -var='enable_api_gateway_domain_name=0' \
+            -var='website_domain_name=""' \
+            -var='api_sub_domain_name=""' \
             -refresh=false  -no-color -auto-approve
 

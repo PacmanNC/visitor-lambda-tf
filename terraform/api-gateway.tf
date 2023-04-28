@@ -1,3 +1,19 @@
+# ACM SSL Certificates
+data "aws_acm_certificate" "acm_cert" {
+  count    = var.enable_api_gateway_domain_name ? 1 : 0
+  domain   = var.website_domain_name
+  provider = aws.us-east-1
+  statuses = [
+    "ISSUED",
+  ]
+}
+
+resource "aws_api_gateway_domain_name" "api_gateway_domain" {
+  count           = var.enable_api_gateway_domain_name ? 1 : 0
+  certificate_arn = data.aws_acm_certificate.acm_cert[0].arn
+  domain_name     = var.api_sub_domain_name
+}
+
 resource "aws_api_gateway_rest_api" "api_gateway" {
   name        = var.project_name
   description = "created with terraform"
