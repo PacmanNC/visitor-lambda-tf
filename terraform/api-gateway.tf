@@ -205,6 +205,7 @@ output "visitor2_stage" {
 }
 
 resource "aws_api_gateway_base_path_mapping" "api_mapping" {
+  count    = var.enable_api_gateway_domain_name ? 1 : 0
   api_id      = aws_api_gateway_rest_api.api_gateway.id
   domain_name = var.api_sub_domain_name
   stage_name       = var.stage
