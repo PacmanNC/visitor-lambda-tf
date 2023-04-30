@@ -31,7 +31,7 @@ jobs:
       # Terraform remote backend state
       - name: Terraform S3 Backend
         id: create
-        run: aws s3api create-bucket --bucket ${{ secrets.KEY_S3_TF_PROD }} --region ${{ vars.REGION }} --create-bucket-configuration LocationConstraint=${{ vars.REGION }}
+        run: aws s3api create-bucket --bucket ${{ secrets.S3_TF_PROD }} --region ${{ vars.REGION }} --create-bucket-configuration LocationConstraint=${{ vars.REGION }}
         continue-on-error: true
 
       # Terraform
