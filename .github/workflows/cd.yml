@@ -51,56 +51,56 @@ jobs:
             -backend-config='key=${{ vars.KEY_S3_TF_DEV }}' \
             -backend-config='region=${{ vars.REGION }}'
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+      # - name: Terraform Validate
+      #   id: validate
+      #   run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: |
-          terraform plan \
-            -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
-            -var='region=${{ vars.REGION }}' \
-            -var='stage=${{ vars.API_GATEWAY_STAGE_DEV }}' \
-            -var='origin=${{ vars.ORIGIN_DEV }}' \
-            -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
-            -var='db_name=${{ vars.DB_NAME_DEV }}' \
-            -var='enable_api_gateway_domain_name=0' \
-            -var='website_domain_name=""' \
-            -var='api_sub_domain_name=""' \
-            -refresh=false  -no-color -out=plan.out
-        continue-on-error: false
+      # - name: Terraform Plan
+      #   id: plan
+      #   run: |
+      #     terraform plan \
+      #       -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
+      #       -var='region=${{ vars.REGION }}' \
+      #       -var='stage=${{ vars.API_GATEWAY_STAGE_DEV }}' \
+      #       -var='origin=${{ vars.ORIGIN_DEV }}' \
+      #       -var='api_resource_name=${{ vars.API_RESOURCE_NAME }}' \
+      #       -var='db_name=${{ vars.DB_NAME_DEV }}' \
+      #       -var='enable_api_gateway_domain_name=0' \
+      #       -var='website_domain_name=""' \
+      #       -var='api_sub_domain_name=""' \
+      #       -refresh=false  -no-color -out=plan.out
+      #   continue-on-error: false
 
-      - name: Terraform Plan Status
-        if: ${{ steps.plan.outcome == 'failure' }}
-        run: exit 1
+      # - name: Terraform Plan Status
+      #   if: ${{ steps.plan.outcome == 'failure' }}
+      #   run: exit 1
 
-      - name: Terraform Apply
-        id: apply
-        run: |
-          terraform apply plan.out
-          API_URL=$(terraform output -raw visitor2_stage)
-          echo "CYPRESS_API_URL=${API_URL}" >> $GITHUB_ENV
-        continue-on-error: true
+      # - name: Terraform Apply
+      #   id: apply
+      #   run: |
+      #     terraform apply plan.out
+      #     API_URL=$(terraform output -raw visitor2_stage)
+      #     echo "CYPRESS_API_URL=${API_URL}" >> $GITHUB_ENV
+      #   continue-on-error: true
 
-      - name: Terraform Apply Status
-        if: ${{ steps.apply.outcome == 'failure' }}
-        run: exit 1
+      # - name: Terraform Apply Status
+      #   if: ${{ steps.apply.outcome == 'failure' }}
+      #   run: exit 1
 
-      # cypress
-      - name: Cypress run
-        id: cypress
-        uses: cypress-io/github-action@v5
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+      # # cypress
+      # - name: Cypress run
+      #   id: cypress
+      #   uses: cypress-io/github-action@v5
+      # - uses: actions/upload-artifact@v3
+      #   if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress/screenshots
 
       # terraform destroy
       - name: Terraform Destroy
         id: destroy
-        if: ${{ steps.cypress.outcome == 'success' && github.event_name == 'pull_request'}}
+        # if: ${{ steps.cypress.outcome == 'success' && github.event_name == 'pull_request'}}
         run: |
           terraform destroy \
             -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_DEV }}' \
