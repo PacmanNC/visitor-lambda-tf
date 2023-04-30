@@ -47,10 +47,10 @@ resource "aws_lambda_permission" "permission_stage" {
   source_arn = "${aws_api_gateway_rest_api.api_gateway.execution_arn}/*/POST/${var.api_resource_name}"
 }
 
-resource "aws_cloudwatch_log_group" "convert_log_group" {
-  name = "/aws/lambda/${aws_lambda_function.visitor2.function_name}"
-  retention_in_days = 1
-  # lifecycle {
-  #   prevent_destroy = true
-  # }
-}
+# resource "aws_cloudwatch_log_group" "convert_log_group" {
+#   name = "/aws/lambda/${aws_lambda_function.visitor2.function_name}"
+#   retention_in_days = 1
+#   # lifecycle {
+#   #   prevent_destroy = true
+#   # }
+# }
