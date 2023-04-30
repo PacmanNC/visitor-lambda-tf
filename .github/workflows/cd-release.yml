@@ -31,7 +31,7 @@ jobs:
       # Terraform remote backend state
       - name: Terraform S3 Backend
         id: create
-        run: aws s3api create-bucket --bucket ${{ secrets.KEY_S3_TF_PROD }} --region ${{ vars.REGION }} --create-bucket-configuration LocationConstraint=${{ vars.REGION }}
+        run: aws s3api create-bucket --bucket ${{ secrets.S3_TF_PROD }} --region ${{ vars.REGION }} --create-bucket-configuration LocationConstraint=${{ vars.REGION }}
         continue-on-error: true
 
       # Terraform
@@ -54,7 +54,6 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: ${{ github.event_name == 'push' }}
         run: |
           terraform plan \
             -var='project_name=${{ vars.VISITOR_LAMBDA_NAME_PROD }}' \
@@ -75,7 +74,6 @@ jobs:
 
       - name: Terraform Apply
         id: apply
-        if: ${{ github.event_name == 'push' }}
         run: |
           terraform apply plan.out
           API_URL=$(terraform output -raw visitor2_stage)
